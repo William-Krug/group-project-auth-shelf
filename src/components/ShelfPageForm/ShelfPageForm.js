@@ -27,6 +27,10 @@ function ShelfPageForm() {
         image_url: newImage,
       },
     });
+
+    // Clear inputs at the end of submission
+    setNewDescription('');
+    setNewImage('');
   };
 
   return (
