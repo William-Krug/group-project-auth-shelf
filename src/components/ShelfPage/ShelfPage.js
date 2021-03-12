@@ -29,6 +29,11 @@ function ShelfPage() {
     .then((willDelete) => {
       console.log('willDelete', willDelete);
       if (willDelete) {
+        dispatch({
+          type: 'DELETE_SHELF_ITEM',
+          payload: itemId
+        });
+        
         swal("Poof! Your imaginary file has been deleted!", {
           icon: "success",
         });
