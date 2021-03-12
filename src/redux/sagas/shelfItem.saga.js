@@ -11,8 +11,8 @@ function* setNewItem(action) {
   try {
     yield axios.post('/api/shelf', action.payload);
 
-    // ToDo, stubbed in get all shelf items.....
-    // yield put({ type: 'FETCH_' })
+    // Update Shelf Items List
+    yield put({ type: 'FETCH_SHELF_ITEMS' });
   } catch (error) {
     alert('Error during request. Please try again later.');
     console.log('setNewItem() ERROR:', error);
