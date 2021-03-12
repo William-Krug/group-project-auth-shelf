@@ -31,7 +31,7 @@ function ShelfPageForm() {
 
   return (
     <>
-      <h3>Add a book</h3>
+      <h3>Add an item to the Shelf</h3>
       <form onSubmit={addShelfItem}>
         {/* Description input */}
         <label>
