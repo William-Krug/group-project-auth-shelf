@@ -12,6 +12,11 @@ function ShelfPage() {
       type: 'FETCH_SHELF_ITEMS'
     })
   }, []);
+
+  // handles delete button click
+  const deleteItem = (itemId) => {
+    console.log('item to delete:', itemId);
+  }
   
   return (
     <div className="container">
@@ -25,7 +30,7 @@ function ShelfPage() {
             <li key={item.id}>
               <img src={item.image_url} alt={item.description} />
               <p>{item.description}</p> 
-              <button>Delete</button>
+              <button onClick={() => deleteItem(item.id)}>Delete</button>
             </li>
           );
         })}
