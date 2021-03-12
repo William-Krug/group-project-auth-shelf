@@ -5,11 +5,13 @@ import swal from 'sweetalert';
 
 import EditPopUp from '../EditPopUp/EditPopUp';
 
+import { Button } from '@material-ui/core';
+
 function ShelfPage() {
   const shelfItems = useSelector((store) => store.shelfItems);
 
   // Pop Up state
-  const [openPopUp, setOpenPopUp] = useState(false);
+ 
 
   const dispatch = useDispatch();
 
@@ -72,17 +74,15 @@ function ShelfPage() {
               <p>{item.description}</p>
 
               {/* Edit Button */}
-              <button onClick={() => setOpenPopUp(true)}>Edit</button>
+              
+              <EditPopUp item={item} />
 
               {/* Delete Button */}
-              <button>Delete</button>
-              <p>{item.description}</p>
-              <button onClick={() => deleteItem(item.id)}>Delete</button>
+              <Button onClick={() => deleteItem(item.id)} color="secondary" variant="outlined">Delete</Button>
             </li>
           );
         })}
       </ul>
-      <EditPopUp openPopUp={openPopUp} setOpenPopUp={setOpenPopUp} />
     </div>
   );
 }

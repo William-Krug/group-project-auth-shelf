@@ -43,12 +43,23 @@ function* deleteShelfItem(action) {
   }
 } // end deleteShelfItem
 
+function* updateShelfItem() {
+  console.log('UPDATESHELF SAGA');
+  try{
+
+  } catch{
+
+  }
+} // end updateShelfItem
+
 function* shelfItemSaga() {
   yield takeLatest('FETCH_SHELF_ITEMS', fetchShelfItems);
 
   yield takeLatest('SET_NEW_ITEM', setNewItem);
 
   yield takeLatest('DELETE_SHELF_ITEM', deleteShelfItem);
+
+  yield takeLatest('UPDATE_ITEM', updateShelfItem);
 }
 
 export default shelfItemSaga;
