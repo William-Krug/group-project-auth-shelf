@@ -32,10 +32,23 @@ function* fetchShelfItems() {
   }
 } // end fetchShelfItems
 
+function* deleteShelfItem(action) {
+  try {
+    // action.payload = itemId
+    yield axios.delete(`/api/shelf/${action.payload}`);
+
+    yield put({ type: 'FETCH_SHELF_ITEMS' });
+  } catch (err) {
+    console.log(`Error deleting item ${action.payload}`, err);
+  }
+} // end deleteShelfItem
+
 function* shelfItemSaga() {
   yield takeLatest('FETCH_SHELF_ITEMS', fetchShelfItems);
 
   yield takeLatest('SET_NEW_ITEM', setNewItem);
+
+  yield takeLatest('DELETE_SHELF_ITEM', deleteShelfItem);
 }
 
 export default shelfItemSaga;
