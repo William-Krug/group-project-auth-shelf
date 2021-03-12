@@ -25,12 +25,16 @@ router.post('/', rejectUnauthenticated, (req, res) => {
   //breadcrumbs for testing and debugging
   console.log('*** Router -> POST /api/shelf');
   console.log('req.body', req.body);
+
+  //define userId
+  let userId = req.user.id;
+
   // endpoint functionality
   const queryString = `
-    INSERT INTO "item" ("description", "image_url")
-    VALUES ($1, $2)`;
+    INSERT INTO "item" ("description", "image_url", "user_id")
+    VALUES ($1, $2, $3)`;
   pool
-    .query(queryString, [req.body.description, req.body.image_url])
+    .query(queryString, [req.body.description, req.body.image_url, userId])
     .then((dbRes) => {
       console.log('Successful item POST');
       res.sendStatus(201);
