@@ -8,8 +8,29 @@ const {
 /**
  * Get all of the items on the shelf
  */
-router.get('/', (req, res) => {
-  res.sendStatus(200); // For testing only, can be removed
+router.get('/', rejectUnauthenticated, (req, res) => {
+  // res.sendStatus(200); // For testing only, can be removed
+
+  console.log('isAuthenticated', req.isAuthenticated());
+  console.log('user is', req.user);
+
+  let queryText = `
+      SELECT * FROM "item"
+      WHERE user_id = $1;
+  `;
+
+  // get the id of the logged in user
+  let userId = req.user.id;
+
+  pool
+    .query(queryText, [userId])
+    .then((result) => {
+      res.send(result.rows);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
+    });
 });
 
 /**

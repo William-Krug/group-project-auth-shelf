@@ -19,7 +19,22 @@ function* setNewItem(action) {
   }
 }
 
+function* fetchShelfItems() {
+  try {
+    let shelfItems = yield axios.get('/api/shelf');
+
+    yield put({
+      type: 'SET_SHELF_ITEMS',
+      payload: shelfItems.data,
+    });
+  } catch (err) {
+    console.log('There was an error fetching shelfItems.', err);
+  }
+} // end fetchShelfItems
+
 function* shelfItemSaga() {
+  yield takeLatest('FETCH_SHELF_ITEMS', fetchShelfItems);
+
   yield takeLatest('SET_NEW_ITEM', setNewItem);
 }
 
