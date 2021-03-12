@@ -77,13 +77,20 @@ router.delete('/:id', rejectUnauthenticated, (req, res) => {
 
   let queryText = `
     DELETE FROM "item" 
-    WHERE "id"= $1 AND "user_id" = $2`;
+    WHERE "id"= $1 AND "user_id" = $2
+    RETURNING *;
+  `;
 
   pool
     .query(queryText, [itemId, userId])
     .then(dbRes => {
+      // check if something was actually deleted
+      if (dbRes.rows.length === 0) {
+        res.sendStatus(404);
+      }
+
       console.log(`Item ${itemId} DELETE Success`);
-      res.sendStatus(200);
+      res.sendStatus(204);
     })
     .catch(err => {
       console.log('Error in DELETE', err);
