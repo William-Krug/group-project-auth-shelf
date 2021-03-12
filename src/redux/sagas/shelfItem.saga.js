@@ -43,12 +43,28 @@ function* deleteShelfItem(action) {
   }
 } // end deleteShelfItem
 
+function* updateShelfItem(action) {
+  console.log('UPDATESHELF SAGA');
+  try{
+    yield axios.put(`/api/shelf/${action.payload.id}`, {
+      description: action.payload.description, 
+      image_url: action.payload.image_url 
+    });
+
+    yield put({ type: 'FETCH_SHELF_ITEMS' });
+  } catch{
+
+  }
+} // end updateShelfItem
+
 function* shelfItemSaga() {
   yield takeLatest('FETCH_SHELF_ITEMS', fetchShelfItems);
 
   yield takeLatest('SET_NEW_ITEM', setNewItem);
 
   yield takeLatest('DELETE_SHELF_ITEM', deleteShelfItem);
+
+  yield takeLatest('UPDATE_ITEM', updateShelfItem);
 }
 
 export default shelfItemSaga;
