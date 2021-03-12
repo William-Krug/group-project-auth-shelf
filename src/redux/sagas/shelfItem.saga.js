@@ -43,10 +43,15 @@ function* deleteShelfItem(action) {
   }
 } // end deleteShelfItem
 
-function* updateShelfItem() {
+function* updateShelfItem(action) {
   console.log('UPDATESHELF SAGA');
   try{
+    yield axios.put(`/api/shelf/${action.payload.id}`, {
+      description: action.payload.description, 
+      image_url: action.payload.image_url 
+    });
 
+    yield put({ type: 'FETCH_SHELF_ITEMS' });
   } catch{
 
   }
