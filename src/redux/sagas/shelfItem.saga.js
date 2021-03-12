@@ -19,6 +19,6 @@ function* fetchShelfItems() {
 function* watcherSaga() {
   yield takeLatest('FETCH_SHELF_ITEMS', fetchShelfItems);
 
-}
+};
 
 export default watcherSaga;
