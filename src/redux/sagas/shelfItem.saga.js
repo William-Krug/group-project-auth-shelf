@@ -1,24 +1,41 @@
+/* Import Libraries */
 import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 
+/* Saga gets form input and sends to db */
+function* setNewItem(action) {
+  // Breadcrumbs for testing and debugging
+  console.log('*** Saga -> setNewItem() ***');
+  console.log('\taction.payload:', action.payload);
+
+  try {
+    yield axios.post('/api/shelf', action.payload);
+
+    // Update Shelf Items List
+    yield put({ type: 'FETCH_SHELF_ITEMS' });
+  } catch (error) {
+    alert('Error during request. Please try again later.');
+    console.log('setNewItem() ERROR:', error);
+  }
+}
+
 function* fetchShelfItems() {
-  try{
+  try {
     let shelfItems = yield axios.get('/api/shelf');
 
     yield put({
       type: 'SET_SHELF_ITEMS',
-      payload: shelfItems.data
-    })
-
+      payload: shelfItems.data,
+    });
   } catch (err) {
     console.log('There was an error fetching shelfItems.', err);
   }
-
 } // end fetchShelfItems
 
-function* watcherSaga() {
+function* shelfItemSaga() {
   yield takeLatest('FETCH_SHELF_ITEMS', fetchShelfItems);
 
-};
+  yield takeLatest('SET_NEW_ITEM', setNewItem);
+}
 
-export default watcherSaga;
+export default shelfItemSaga;

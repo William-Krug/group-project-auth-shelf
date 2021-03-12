@@ -1,7 +1,9 @@
 const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
-const {rejectUnauthenticated} = require('../modules/authentication-middleware');
+const {
+  rejectUnauthenticated,
+} = require('../modules/authentication-middleware');
 
 /**
  * Get all of the items on the shelf
@@ -20,21 +22,48 @@ router.get('/', rejectUnauthenticated, (req, res) => {
   // get the id of the logged in user
   let userId = req.user.id;
 
-  pool.query(queryText, [userId])
-      .then((result) => {
-          res.send(result.rows);
-      })
-      .catch((error) => {
-          console.log(error);
-          res.sendStatus(500);
-      });
+  pool
+    .query(queryText, [userId])
+    .then((result) => {
+      res.send(result.rows);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
+    });
 });
 
 /**
  * Add an item for the logged in user to the shelf
+ *
+ * req.body looks like:
+ * {
+ *  description: baseball   -- string
+ *  image_url: http://www...  --string
+ * }
  */
-router.post('/', (req, res) => {
+router.post('/', rejectUnauthenticated, (req, res) => {
+  //breadcrumbs for testing and debugging
+  console.log('*** Router -> POST /api/shelf');
+  console.log('req.body', req.body);
+
+  //define userId
+  let userId = req.user.id;
+
   // endpoint functionality
+  const queryString = `
+    INSERT INTO "item" ("description", "image_url", "user_id")
+    VALUES ($1, $2, $3)`;
+  pool
+    .query(queryString, [req.body.description, req.body.image_url, userId])
+    .then((dbRes) => {
+      console.log('Successful item POST');
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.log('Error in POST', err);
+      res.sendStatus(500);
+    });
 });
 
 /**
