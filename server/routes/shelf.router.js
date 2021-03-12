@@ -73,10 +73,14 @@ router.delete('/:id', rejectUnauthenticated, (req, res) => {
   // endpoint functionality
   let itemId = req.params.id;
 
-  let queryText = 'DELETE FROM "item" where "id" = $1'
+  let userId = req.user.id;
+
+  let queryText = `
+    DELETE FROM "item" 
+    WHERE "id"= $1 AND "user_id" = $2`;
 
   pool
-    .query(queryText, [itemId])
+    .query(queryText, [itemId, userId])
     .then(dbRes => {
       console.log(`Item ${itemId} DELETE Success`);
       res.sendStatus(200);
